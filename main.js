@@ -60,3 +60,72 @@ try {
 } catch (error) {
   console.error('Swagger generation error:', error);
 }
+
+// --- Обмеження методів (405) ---
+
+// /register – лише POST
+app.all('/register', (req, res, next) => {
+  if (req.method !== 'POST') {
+    return res.status(405).send('Method Not Allowed');
+  }
+  next();
+});
+
+// /inventory – лише GET
+app.all('/inventory', (req, res, next) => {
+  if (req.method !== 'GET') {
+    return res.status(405).send('Method Not Allowed');
+  }
+  next();
+});
+
+// /inventory/:id – GET, PUT, DELETE
+app.all('/inventory/:id', (req, res, next) => {
+  const allowed = ['GET', 'PUT', 'DELETE'];
+  if (!allowed.includes(req.method)) {
+    return res.status(405).send('Method Not Allowed');
+  }
+  next();
+});
+
+// /inventory/:id/photo – GET, PUT
+app.all('/inventory/:id/photo', (req, res, next) => {
+  const allowed = ['GET', 'PUT'];
+  if (!allowed.includes(req.method)) {
+    return res.status(405).send('Method Not Allowed');
+  }
+  next();
+});
+
+// /search – лише POST
+app.all('/search', (req, res, next) => {
+  if (req.method !== 'POST') {
+    return res.status(405).send('Method Not Allowed');
+  }
+  next();
+});
+
+// Форми – лише GET
+app.all('/RegisterForm.html', (req, res, next) => {
+  if (req.method !== 'GET') {
+    return res.status(405).send('Method Not Allowed');
+  }
+  next();
+});
+
+app.all('/SearchForm.html', (req, res, next) => {
+  if (req.method !== 'GET') {
+    return res.status(405).send('Method Not Allowed');
+  }
+  next();
+});
+
+// --- Роздача HTML-форм ---
+
+app.get('/RegisterForm.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'RegisterForm.html'));
+});
+
+app.get('/SearchForm.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'SearchForm.html'));
+});
