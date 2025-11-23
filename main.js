@@ -384,3 +384,37 @@ app.put('/inventory/:id/photo', upload.single('photo'), (req, res) => {
  *       404:
  *         description: Not found
  */
+
+app.post('/search', (req, res) => {
+  const searchId = req.body.id;
+  const includePhoto = req.body.has_photo === 'on';
+
+  const item = inventory.find((i) => i.id === searchId);
+  if (!item) return res.status(404).send('Not found');
+
+  let resultDescription = item.description;
+  if (includePhoto && item.photoPath) {
+    resultDescription += ` Photo URL: http://${options.host}:${options.port}/inventory/${item.id}/photo`;
+  }
+
+  res.json({
+    id: item.id,
+    name: item.name,
+    description: resultDescription,
+    photoUrl: item.photoPath
+      ? `http://${options.host}:${options.port}/inventory/${item.id}/photo`
+      : null,
+  });
+});
+
+// --- Обробник 404 (якщо шлях взагалі не існує) ---
+app.use((req, res) => {
+  res.status(404).send('Not Found');
+});
+
+// --- Запуск сервера ---
+app.listen(options.port, options.host, () => {
+  console.log(`Server running at http://${options.host}:${options.port}`);
+  console.log(`Swagger docs at http://${options.host}:${options.port}/docs`);
+  console.log(`Cache dir: ${options.cache}`);
+});
