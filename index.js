@@ -27,7 +27,7 @@ const swaggerOptions = {
             },
         ],
     },
-    apis: ['./main.js'],
+    apis: [path.join(__dirname, 'index.js')],
 };
 
 const swaggerSpecs = swaggerJsDoc(swaggerOptions);
