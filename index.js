@@ -455,6 +455,25 @@ app.all('/register', (req, res) => {
     res.status(405).send('Метод не дозволено');
 });
 
+app.get('/', (req, res) => {
+  res.send(`
+    <html>
+      <head>
+        <title>Inventory Service</title>
+        <meta charset="utf-8"/>
+      </head>
+      <body>
+        <h1>Welcome to Inventory Service</h1>
+        <ul>
+          <li><a href="/RegisterForm.html">Registration Form</a></li>
+          <li><a href="/SearchForm.html">Search Form</a></li>
+          <li><a href="/api-docs">Swagger API Documentation</a></li>
+        </ul>
+      </body>
+    </html>
+  `);
+});
+
 app.use((req, res) => {
     res.status(404).send('Помилка: Ендпоінт не знайдено');
 });
